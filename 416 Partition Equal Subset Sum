@@ -1,0 +1,28 @@
+public class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for (int i=0; i<nums.length; i++) {
+            sum += nums[i];
+        }
+        if (sum % 2 == 1) {
+            return false;
+        }
+        sum = sum / 2;
+        boolean[] dp = new boolean[sum];
+        dp[0] = true;
+        for (int i=0; i<nums.length; i++) {
+            if (sum-nums[i] >= 0 && dp[sum - nums[i]]) {
+                return true;
+            }
+            for (int j=sum-1; j>=1; j--) {
+                if (j - nums[i] < 0) {
+                    break;
+                }
+                if (j - nums[i] >= 0 && dp[j - nums[i]]) {
+                    dp[j] = true;
+                }
+            }
+        }
+        return false;
+    }
+}
