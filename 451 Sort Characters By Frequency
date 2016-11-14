@@ -1,0 +1,29 @@
+import java.util.*;
+public class Solution {
+    public String frequencySort(String s) {
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        PriorityQueue<Character> heap = new PriorityQueue<Character>(new Comparator<Character>() {
+            public int compare(Character a, Character b) {
+                return map.get(b) - map.get(a);
+            }
+        });
+        for (int i=0; i<s.length(); i++) {
+            if (!map.containsKey(s.charAt(i))) {
+                map.put(s.charAt(i), 0);
+            }
+            map.put(s.charAt(i), map.get(s.charAt(i))+1);
+        }
+        for (Character key : map.keySet()) {
+            heap.offer(key);
+        }
+        StringBuilder result = new StringBuilder();
+        while (heap.size() != 0) {
+            char temp = heap.poll();
+            int freq = map.get(temp);
+            for (int i=0; i<freq; i++) {
+                result.append(temp);
+            }
+        }
+        return result.toString();
+    }
+}
