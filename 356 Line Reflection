@@ -1,0 +1,50 @@
+import java.util.*;
+public class Solution {
+    public boolean isReflected(int[][] points) {
+        Map<Integer, Set<Integer>> map = new HashMap<Integer, Set<Integer>>();
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int i=0; i<points.length; i++) {
+            if (points[i][0] > max) {
+                max = points[i][0];
+            }
+            if (points[i][0] < min) {
+                min = points[i][0];
+            }
+        }
+        int sum = max + min;
+        for (int i=0; i<points.length; i++) {
+            int distance = sum - 2*points[i][0];
+            if (distance == 0) {
+                continue;
+            }
+            if (!map.containsKey(distance)) {
+                Set<Integer> temp = new HashSet<Integer>();
+                temp.add(points[i][1]);
+                map.put(distance, temp);
+            } else {
+                if (!map.get(distance).contains(points[i][1])) {
+                    map.get(distance).add(points[i][1]);
+                }
+            }
+        }
+        for (Integer key:map.keySet()) {
+            if (!map.containsKey(-key)) {
+                return false;
+            } else {
+                Set<Integer> temp1 = map.get(key);
+                Set<Integer> temp2 = map.get(-key);
+                if (temp1.size() != temp2.size()) {
+                    return false;
+                } else {
+                    for (Integer element:temp1) {
+                        if (!temp2.contains(element)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+}
