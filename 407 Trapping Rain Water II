@@ -1,0 +1,42 @@
+public class Solution {
+    public int trapRainWater(int[][] heightMap) {
+        if (heightMap.length == 0) {
+            return 0;
+        }
+        Queue<int[]> boundary = new PriorityQueue<int[]>(10, new Comparator<int[]>() {
+            public int compare(int[] a, int[] b) {
+                return a[2] - b[2];
+            }
+        });
+        int[][] visited = new int[heightMap.length][heightMap[0].length];
+        for (int i=0; i<heightMap.length; i++) {
+            boundary.offer(new int[]{i, 0, heightMap[i][0]});
+            visited[i][0] = 1;
+            boundary.offer(new int[]{i, heightMap[0].length-1, heightMap[i][heightMap[0].length-1]});
+            visited[i][heightMap[0].length-1] = 1;
+        }
+        for (int i=1; i<heightMap[0].length-1; i++) {
+            boundary.offer(new int[]{0, i, heightMap[0][i]});
+            visited[0][i] = 1;
+            boundary.offer(new int[]{heightMap.length-1, i, heightMap[heightMap.length-1][i]});
+            visited[heightMap.length-1][i] = 1;
+        }
+        int[][] dir = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+        int sum = 0;
+        while (boundary.size() != 0) {
+            int[] temp = boundary.poll();
+            for (int i=0; i<4; i++) {
+                int x = temp[0] + dir[i][0];
+                int y = temp[1] + dir[i][1];
+                if (x<0 || y<0 || x>=heightMap.length || y>=heightMap[0].length || visited[x][y] == 1) {
+                    continue;
+                }
+                sum += Math.max(0, temp[2] - heightMap[x][y]);
+                int newbound = Math.max(temp[2], heightMap[x][y]);
+                boundary.offer(new int[]{x, y, newbound});
+                visited[x][y] = 1;
+            }
+        }
+        return sum;
+    }
+}
