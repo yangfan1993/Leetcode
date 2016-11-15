@@ -1,0 +1,47 @@
+public class Solution {
+    public int minArea(char[][] image, int x, int y) {
+        int left = search(image, 0, y, 0, image.length-1, true, true);
+        System.out.println(left);
+        int right = search(image, y, image[0].length, 0, image.length-1, false, true);
+        System.out.println(right);
+        int up = search(image, 0, x, left, right-1, true, false);
+        System.out.println(up);
+        int down = search(image, x, image.length, left, right-1, false, false);
+        System.out.println(down);
+        int area = (right - left) * (down - up);
+        return area;
+    }
+    public int search(char[][] image, int lower, int upper, int min, int max, boolean small, boolean horizon) {
+        while (lower < upper) {
+            int mid = lower + (upper - lower)/2;
+            boolean exist = false;
+            for (int i=min; i<=max; i++) {
+                if (horizon) { 
+                    if (image[i][mid] == '1') {
+                        exist = true;
+                        break;
+                    }
+                } else {
+                    if (image[mid][i] == '1') {
+                        exist = true;
+                        break;
+                    }
+                }
+            }
+            if (small) {
+                if (exist) {
+                    upper = mid;
+                } else {
+                    lower = mid + 1;
+                }
+            } else {
+                if (exist) {
+                    lower = mid + 1;
+                } else {
+                    upper = mid;
+                }
+            }
+        }
+        return lower;
+    }
+}
