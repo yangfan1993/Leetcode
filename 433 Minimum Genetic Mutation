@@ -1,0 +1,40 @@
+import java.util.*;
+public class Solution {
+    public int minMutation(String start, String end, String[] bank) {
+        Queue<String> queue = new LinkedList<String>();
+        Set<String> visited = new HashSet<String>();
+        queue.offer(start);
+        visited.add(start);
+        int layer = 0;
+        String[] temp = new String[]{"A", "G", "T", "C"};
+        while (queue.size() != 0) {
+            int size = queue.size();
+            layer ++;
+            for (int i=0; i<size; i++) {
+                String gene = queue.poll();
+                for (String newgene : bank) {
+                    if (!diffone(newgene, gene)) {
+                        continue;
+                    }
+                    if (newgene.equals(end)) {
+                        return layer;
+                    }
+                    if (!visited.contains(newgene)) {
+                        queue.offer(newgene);
+                        visited.add(newgene);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    public boolean diffone(String str1, String str2) {
+        int count = 0;
+        for (int i=0; i<str1.length(); i++) {
+            if (str1.charAt(i) != str2.charAt(i)) {
+                count ++;
+            }
+        }
+        return count == 1;
+    }
+}
