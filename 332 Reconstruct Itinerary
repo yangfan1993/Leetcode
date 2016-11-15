@@ -1,0 +1,44 @@
+import java.util.*;
+public class Solution {
+    public List<String> findItinerary(String[][] tickets) {
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        List<String> result = new ArrayList<String>();
+        List<String> current = new ArrayList<String>();
+        for (int i=0; i<tickets.length; i++) {
+            if (!map.containsKey(tickets[i][0])) {
+                map.put(tickets[i][0], new ArrayList<String>());
+            }
+            map.get(tickets[i][0]).add(tickets[i][1]);
+        }
+        for (String key : map.keySet()) {
+            Collections.sort(map.get(key));
+        }
+        result = DFS(map, current, "JFK");
+        return result;
+    }
+    public List<String> DFS(Map<String, List<String>> map, List<String> current, String airport) {
+        if (map.size() == 0) {
+            current.add(airport);
+            List<String> result = new ArrayList<String>(current);
+            return result;
+        }
+        if (!map.containsKey(airport)) {
+            return new ArrayList();
+        }
+        List<String> next = new ArrayList<String>(map.get(airport));
+        for (int i=0; i<next.size(); i++) {
+            current.add(airport);
+            map.get(airport).remove(i);
+            if (map.get(airport).size() == 0) {
+                map.remove(airport);
+            }
+            List<String> result = DFS(map, current, next.get(i));
+            if (result.size() != 0) {
+                return result;
+            }
+            map.put(airport, new ArrayList<String>(next));
+            current.remove(current.size()-1);
+        }
+        return new ArrayList();
+    }
+}
