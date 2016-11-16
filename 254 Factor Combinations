@@ -1,0 +1,27 @@
+public class Solution {
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        List<Integer> current = new ArrayList<Integer>();
+        for (int i=2; i*i <= n; i++) {
+            if (n % i == 0) {
+                current.add(i);
+                DFS(result, current, n/i, i);
+                current.remove(current.size()-1);
+            }
+        }
+        return result;
+    }
+    public void DFS(List<List<Integer>> result, List<Integer> current, int n, int min) {
+        List<Integer> temp = new ArrayList<Integer>(current);
+        temp.add(n);
+        result.add(temp);
+        for (int i=min; i*i <= n; i++) {
+            if (n % i == 0) {
+                current.add(i);
+                DFS(result, current, n/i, i);
+                current.remove(current.size()-1);
+            }
+        }
+        return;
+    }
+}
