@@ -1,0 +1,42 @@
+public class Solution {
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null) {
+            return;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        ListNode newhead = slow.next;
+        slow.next = null;
+        newhead = reverse(newhead);
+        ListNode tail = head;
+        ListNode tail1 = head.next;
+        ListNode tail2 = newhead;
+        while (tail1 != null || tail2 != null) {
+            if (tail2 != null) {
+                tail.next = tail2;
+                tail2 = tail2.next;
+                tail = tail.next;
+            }
+            if (tail1 != null) {
+                tail.next = tail1;
+                tail1 = tail1.next;
+                tail = tail.next;
+            }
+        }
+        tail.next = null;
+        return;
+    }
+    public ListNode reverse(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode newhead = reverse(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newhead;
+    }
+}
