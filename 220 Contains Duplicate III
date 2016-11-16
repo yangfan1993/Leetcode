@@ -1,0 +1,17 @@
+public class Solution {
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>();
+        for (int i=0; i<nums.length; i++) {
+            if (i > k) {
+                if (map.get(nums[i-k-1]) == i-k-1) {
+                    map.remove(nums[i-k-1]);
+                }
+            }
+            if (map.ceilingKey(nums[i]-t) != null && map.ceilingKey(nums[i]-t)-t <= nums[i]) {
+                return true;
+            }
+            map.put(nums[i], i);
+        }
+        return false;
+    }
+}
