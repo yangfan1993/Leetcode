@@ -1,0 +1,24 @@
+public class Solution {
+    public int maxProfit(int k, int[] prices) {
+        if (k <= 0) {
+            return 0;
+        }
+        if (k >= prices.length) {
+            int greedy = 0;
+            for (int i=1; i<prices.length; i++) {
+                greedy += Math.max(prices[i]-prices[i-1], 0);
+            }
+            return greedy;
+        }
+        int[] consecutive = new int[k+1];
+        int[] result = new int[k+1];
+        for (int i=0; i<prices.length-1; i++) {
+            int diff = prices[i+1] - prices[i];
+            for (int j=k; j>=1; j--) {
+                consecutive[j] = Math.max(result[j-1]+Math.max(diff,0), consecutive[j]+diff);
+                result[j] = Math.max(consecutive[j], result[j]);
+            }
+        }
+        return result[k];
+    }
+}
