@@ -1,0 +1,56 @@
+import java.util.*;
+public class Solution {
+    public boolean isRectangleCover(int[][] rectangles) {
+        int max_x = Integer.MIN_VALUE;
+        int min_x = Integer.MAX_VALUE;
+        int max_y = Integer.MIN_VALUE;
+        int min_y = Integer.MAX_VALUE;
+        int area = 0;
+        for (int i=0; i<rectangles.length; i++) {
+            min_x = Math.min(min_x, rectangles[i][0]);
+            min_y = Math.min(min_y, rectangles[i][1]);
+            max_x = Math.max(max_x, rectangles[i][2]);
+            max_y = Math.max(max_y, rectangles[i][3]);
+            area += (rectangles[i][3] - rectangles[i][1]) * (rectangles[i][2] - rectangles[i][0]); 
+        }
+        if (area != (max_x-min_x) * (max_y-min_y)) {
+            return false;
+        }
+        Set<String> points = new HashSet<String>();
+        for (int i=0; i<rectangles.length; i++) {
+            String point1 = rectangles[i][0] + "" + rectangles[i][1];
+            String point2 = rectangles[i][2] + "" + rectangles[i][3];
+            String point3 = rectangles[i][0] + "" + rectangles[i][3];
+            String point4 = rectangles[i][2] + "" + rectangles[i][1];
+            if (!points.contains(point1)) {
+                points.add(point1);
+            } else {
+                points.remove(point1);
+            }
+            if (!points.contains(point2)) {
+                points.add(point2);
+            } else {
+                points.remove(point2);
+            }
+            if (!points.contains(point3)) {
+                points.add(point3);
+            } else {
+                points.remove(point3);
+            }
+            if (!points.contains(point4)) {
+                points.add(point4);
+            } else {
+                points.remove(point4);
+            }
+        }
+        String corner1 = max_x + "" + max_y;
+        String corner2 = min_x + "" + max_y;
+        String corner3 = max_x + "" + min_y;
+        String corner4 = min_x + "" + min_y;
+        if (points.size() != 4 || !points.contains(corner1) || !points.contains(corner2)
+            || !points.contains(corner3) || !points.contains(corner4)) {
+            return false;
+        }
+        return true;
+    }
+}
