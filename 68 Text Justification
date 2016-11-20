@@ -1,0 +1,60 @@
+public class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> result = new ArrayList<String>();
+        if (maxWidth == 0) {
+            result.add("");
+            return result;
+        }
+        int length = 0;
+        int index = 0;
+        for (int i=0; i<words.length; i++) {
+            if (length + words[i].length() + 1 > maxWidth + 1) {
+                int num_word = i-index;
+                int word_length = length - num_word;
+                //System.out.println(word_length);
+                int blank_length = maxWidth - word_length;
+                //System.out.println(blank_length);
+                if (num_word == 1) {
+                    StringBuilder builder = new StringBuilder(words[index]);
+                    for (int j=0; j<maxWidth-words[index].length(); j++) {
+                        builder.append(" ");
+                    }
+                    result.add(builder.toString());
+                } else {
+                    StringBuilder builder = new StringBuilder();
+                    int div = blank_length / (num_word-1);
+                    int mod = blank_length % (num_word-1);
+                    for (int j=index; j<i; j++) {
+                        builder.append(words[j]);
+                        if (j != i-1) {
+                            for (int k=0; k<div; k++) {
+                                builder.append(" ");
+                            }
+                        }
+                        if (j < index+mod) {
+                            builder.append(" ");
+                        }
+                    }
+                    result.add(builder.toString());
+                    System.out.println(builder.toString());
+                }
+                length = 0;
+                index = i--;
+            } else {
+                length += words[i].length() + 1;
+            }
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int j=index; j<words.length; j++) {
+            builder.append(words[j]);
+            if (builder.length() < maxWidth) {
+                builder.append(" ");
+            }
+        }
+        while (builder.length() < maxWidth) {
+            builder.append(" ");
+        }
+        result.add(builder.toString());
+        return result;
+    }
+}
