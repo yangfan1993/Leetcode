@@ -1,0 +1,76 @@
+public class Solution {
+    class TrieNode {
+        List<String> prefix; 
+        TrieNode[] children;
+        public TrieNode() {
+            prefix = new ArrayList<>();
+            children = new TrieNode[26];
+        }
+    }
+    class Trie {
+        TrieNode root;
+        
+        public Trie(String[] words) {
+            root = new TrieNode();
+            for (int i=0; i<words.length; i++) {
+                TrieNode current = root;
+                for (int j=0; j<words[i].length(); j++) {
+                    int index = words[i].charAt(j) - 'a';
+                    if (current.children[index] == null) {
+                        current.children[index] = new TrieNode();
+                    }
+                    current.children[index].prefix.add(words[i]);
+                    current = current.children[index];
+                }
+            }
+        }
+        
+        List<String> find(String prefix) {
+            TrieNode current = root;
+            List<String> result = new ArrayList<String>();
+            for (int i=0; i<prefix.length(); i++) {
+                int index = prefix.charAt(i)-'a';
+                if (current.children[index] == null) {
+                    return result;
+                }
+                current = current.children[index];
+            }
+            result = new ArrayList<String>(current.prefix);
+            return result;
+        }
+    }
+    public List<List<String>> wordSquares(String[] words) {
+        List<List<String>> result = new ArrayList<List<String>>();
+        if (words.length == 0) {
+            return result;
+        }
+        Trie trie = new Trie(words);
+        List<String> current = new ArrayList<String>();
+        for (int i=0; i<words.length; i++) {
+            current.add(words[i]);
+            DFS(words, words[0].length(), trie, result, current);
+            current.remove(current.size()-1);
+        }
+        return result;
+    }
+    
+    public void DFS(String[] words, int len, Trie trie, List<List<String>> result, List<String> current) {
+        //System.out.println(current);
+        if (current.size() == len) {
+            result.add(new ArrayList<String>(current));
+            return;
+        }
+        int index = current.size();
+        StringBuilder start = new StringBuilder();
+        for (int i=0; i<current.size(); i++) {
+            start.append(current.get(i).charAt(index));
+        }
+        List<String> prefix = trie.find(start.toString());
+        for (int i=0; i<prefix.size(); i++) {
+            current.add(prefix.get(i));
+            DFS(words, len, trie, result, current);
+            current.remove(current.size()-1);
+        }
+        return;
+    }
+}
