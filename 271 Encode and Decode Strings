@@ -1,0 +1,26 @@
+public class Codec {
+
+    public String encode(List<String> strs) {
+        StringBuilder result = new StringBuilder();
+        for (int i=0; i<strs.size(); i++) {
+            result.append(String.valueOf(strs.get(i).length()) + "#");
+            result.append(strs.get(i));
+        }
+        return result.toString();
+    }
+
+    public List<String> decode(String s) {
+        List<String> result = new ArrayList<String>();
+        int index1= 0;
+        while (index1 < s.length()) {
+            int index2 = index1;
+            while (s.charAt(index2) != '#') {
+                index2 ++;
+            }
+            int size = Integer.valueOf(s.substring(index1, index2));
+            result.add(s.substring(index2+1, index2+size+1));
+            index1 = index2+size+1;
+        }
+        return result;
+    }
+}
