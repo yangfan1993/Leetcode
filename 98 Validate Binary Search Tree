@@ -1,0 +1,28 @@
+public class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) {
+            return true;
+        } else {
+            return helper(root, null, null);
+        }
+    }
+    public boolean helper(TreeNode root, Integer min, Integer max) {
+        if (min != null && (root.val <= min)) {
+            return false;
+        }
+        if (max != null && (root.val >= max)) {
+            return false;
+        }
+        if (root.left != null) {
+            if (!helper(root.left, min, root.val)) {
+                return false;
+            }
+        }
+        if (root.right != null) {
+            if (!helper(root.right, root.val, max)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
