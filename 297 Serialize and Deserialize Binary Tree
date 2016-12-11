@@ -1,0 +1,47 @@
+public class Codec {
+
+    public String serialize(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        StringBuilder result = new StringBuilder();
+        queue.offer(root);
+        while (queue.size() != 0) {
+            TreeNode temp = queue.poll();
+            if (temp == null) {
+                result.append("#,");
+            } else {
+                result.append(String.valueOf(temp.val));
+                result.append(",");
+                queue.offer(temp.left);
+                queue.offer(temp.right);
+            }
+        }
+        result.setLength(result.length()-1);
+        return result.toString();
+    }
+
+    public TreeNode deserialize(String data) {
+        String[] node = data.split(",");
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        if (node.length == 1) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.valueOf(node[0]));
+        queue.offer(root);
+        for (int i=1; i<node.length; i+=2) {
+            String left = node[i];
+            String right = node[i+1];
+            TreeNode temp = queue.poll();
+            if (!left.equals("#")) {
+                TreeNode le = new TreeNode(Integer.valueOf(left));
+                temp.left = le;
+                queue.offer(le);
+            }
+            if (!right.equals("#")) {
+                TreeNode ri = new TreeNode(Integer.valueOf(right));
+                temp.right = ri;
+                queue.offer(ri);
+            }
+        }
+        return root;
+    }
+}
