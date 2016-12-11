@@ -1,0 +1,41 @@
+public class Solution {
+    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+        if (desiredTotal == 0) {
+            return true;
+        } else if (maxChoosableInteger*(maxChoosableInteger+1)/2 < desiredTotal) {
+            return false;
+        }
+        boolean[] state = new boolean[maxChoosableInteger];
+        HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+        return helper(desiredTotal, state, map);
+    }
+    public boolean helper(int total, boolean[] state, HashMap<Integer, Boolean> map) {
+        int current = generate(state);
+        if (map.containsKey(current)) {
+            return map.get(current);
+        }
+        for (int i=0; i<state.length; i++) {
+            if (!state[i]) {
+                state[i] = true;
+                if (total <= i+1 || !helper(total-(i+1), state, map)) {
+                    map.put(current, true);
+                    state[i] = false;
+                    return true;
+                }
+                state[i] = false;
+            }
+        }
+        map.put(current, false);
+        return false;
+    }
+    public int generate(boolean[] state) {
+        int num = 0;
+        for (int i=0; i<state.length; i++) {
+            num <<= 1;
+            if (state[i]) {
+                num += 1;
+            }
+        }
+        return num;
+    }
+}
